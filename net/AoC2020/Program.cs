@@ -1,7 +1,7 @@
-﻿using System;
+﻿using AoC2020.Solutions;
+using System;
 using System.Linq;
 using System.Reflection;
-using AoC2020.Solutions;
 
 namespace AoC2020
 {
@@ -15,8 +15,9 @@ namespace AoC2020
 
             foreach (var solution in solutions)
             {
-                Console.WriteLine($"{nameof(solution)} A: {solution.SolveA()}");
-                Console.WriteLine($"{nameof(solution)} B: {solution.SolveB()}");
+                Console.WriteLine(solution.GetType().Name);
+                Console.WriteLine($"A: {solution.SolveA()}");
+                Console.WriteLine($"B: {solution.SolveB()}");
                 Console.WriteLine();
             }
         }
