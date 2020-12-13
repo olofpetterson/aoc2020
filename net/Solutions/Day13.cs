@@ -28,7 +28,7 @@ namespace AoC2020.Solutions
 
         public override string SolveB()
         {
-            var buses = new List<(long, long)>();
+            var buses = new List<(long cycle, long offset)>();
             lines[1].Split(",").Aggregate(0, (index, bus) =>
             {
                 if (bus != "x")
@@ -39,17 +39,15 @@ namespace AoC2020.Solutions
                 return index + 1;
             });
 
-            long departure = 0;
-            buses.OrderByDescending(x => x.Item1).Aggregate(buses[0].Item1, (cycle, bus) =>
+            var (departure, _) = buses.OrderByDescending(x => x.cycle).Aggregate((departure: 0L, buses[0].cycle), (input, bus) =>
             {
-                while ((departure + bus.Item2) % bus.Item1 != 0)
+                while ((input.departure + bus.offset) % bus.cycle != 0)
                 {
-                    departure += cycle;
+                    input.departure += input.cycle;
                 }
 
-                return cycle * bus.Item1;
+                return (input.departure, input.cycle * bus.cycle);
             });
-
             return departure.ToString();
         }
     }
