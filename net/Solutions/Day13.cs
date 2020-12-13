@@ -39,7 +39,7 @@ namespace AoC2020.Solutions
                 return index + 1;
             });
 
-            var (departure, _) = buses.OrderByDescending(x => x.cycle).Aggregate((departure: 0L, buses[0].cycle), (input, bus) =>
+            var (departure, _) = buses.Aggregate((departure: 0L, buses[0].cycle), (input, bus) =>
             {
                 while ((input.departure + bus.offset) % bus.cycle != 0)
                 {
