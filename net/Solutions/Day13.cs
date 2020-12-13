@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AoC2020.Solutions
@@ -39,7 +40,7 @@ namespace AoC2020.Solutions
                 return index + 1;
             });
 
-            var (departure, _) = buses.Aggregate((departure: 0L, buses[0].cycle), (input, bus) =>
+            var (departure, _) = buses.Aggregate((departure: 0L, cycle: 1L), (input, bus) =>
             {
                 while ((input.departure + bus.offset) % bus.cycle != 0)
                 {
