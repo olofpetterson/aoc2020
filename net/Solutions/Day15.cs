@@ -18,8 +18,8 @@ namespace AoC2020.Solutions
         {
             var numbers = lines[0].Split(",").Select((number, index) => (index + 1,  int.Parse(number))).ToDictionary(number => number.Item2, number => (number.Item1, 0));
             var count = numbers.Count;
-
             var lastNumber = numbers.Keys.Last();
+            
             while (count++ < limit)
             {
                 if (numbers.TryGetValue(lastNumber, out var value) && value.Item2 > 0)
