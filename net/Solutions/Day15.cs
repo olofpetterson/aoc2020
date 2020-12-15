@@ -16,19 +16,20 @@ namespace AoC2020.Solutions
 
         private int Run(int limit)
         {
-            var numbers = lines[0].Split(",").Select((number, index) => (index + 1,  int.Parse(number))).ToDictionary(number => number.Item2, number => (number.Item1, 0));
-            var count = numbers.Count;
+            var numbers = lines[0].Split(",")
+                .Select((number, index) => (index: index + 1, number: int.Parse(number)))
+                .ToDictionary(number => number.number, number => (number.index, previousIndex: 0));
             var lastNumber = numbers.Keys.Last();
             
-            while (count++ < limit)
+            for(var i = numbers.Count + 1; i <= limit; i++)
             {
-                if (numbers.TryGetValue(lastNumber, out var value) && value.Item2 > 0)
+                if (numbers.TryGetValue(lastNumber, out var value) && value.previousIndex > 0)
                 {
-                    AddNumber(value.Item1 - value.Item2, count);
+                    AddNumber(value.index - value.previousIndex, i);
                 }
                 else
                 {
-                    AddNumber(0, count);
+                    AddNumber(0, i);
                 }
             }
 
