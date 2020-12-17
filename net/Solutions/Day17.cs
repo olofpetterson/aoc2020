@@ -7,54 +7,57 @@ namespace AoC2020.Solutions
     {
         public override string SolveA()
         {
-            var dict = new Dictionary<(int x, int y, int z), bool>();
+            var activeCubes = new HashSet<(int x, int y, int z)>();
             for (var y = 0; y < lines.Length; y++)
             {
                 for (var x = 0; x < lines[0].Length; x++)
                 {
-                    dict[(x, y, 0)] = lines[y][x] == '#';
+                    if (lines[y][x] == '#')
+                        activeCubes.Add((x, y, 0));
                 }
             }
 
             var range = Enumerable.Range(-1, 3).ToArray();
-            var moves = (from z in range from y in range from x in range where x != 0 || y != 0 || z != 0 select (x, y, z)).ToList();
+            var moves = (from z in range from y in range from x in range where x != 0 || y != 0 || z != 0 select (x, y, z)).ToArray();
 
             for (var i = 0; i < 6; i++)
             {
-                var newDict = new Dictionary<(int, int, int), bool>();
-                for (var z = dict.Keys.Min(x => x.z) -1; z < dict.Keys.Max(x => x.z) + 2; z++)
+                var newActiveCubes = new HashSet<(int x, int y, int z)>();
+                for (var z = activeCubes.Min(x => x.z) -1; z < activeCubes.Max(x => x.z) + 2; z++)
                 {
-                    for (var y = dict.Keys.Min(x => x.y) - 1; y < dict.Keys.Max(x => x.y) + 2; y++)
+                    for (var y = activeCubes.Min(x => x.y) - 1; y < activeCubes.Max(x => x.y) + 2; y++)
                     {
-                        for (var x = dict.Keys.Min(a => a.x) - 1; x < dict.Keys.Max(a => a.x) + 2; x++)
+                        for (var x = activeCubes.Min(a => a.x) - 1; x < activeCubes.Max(a => a.x) + 2; x++)
                         {
-                            var count = 0;
-                            foreach (var move in moves)
-                            {
-                                dict.TryGetValue((x + move.x, y + move.y, z + move.z), out var active);
-                                count += active ? 1 : 0;
-                            }
+                            var count = moves.Count(move => activeCubes.Contains((x + move.x, y + move.y, z + move.z)));
 
-                            dict.TryGetValue((x, y, z), out var isActive);
-                            newDict[(x, y, z)] = isActive ? count == 2 || count == 3 : count == 3;
+                            if (activeCubes.Contains((x, y, z)) && (count == 2 || count == 3))
+                            {
+                                newActiveCubes.Add((x, y, z));
+                            }
+                            else if (count == 3)
+                            {
+                                newActiveCubes.Add((x, y, z));
+                            }
                         }
                     }
                 }
 
-                dict = newDict;
+                activeCubes = newActiveCubes;
             }
 
-            return dict.Count(x => x.Value).ToString();
+            return activeCubes.Count.ToString();
         }
 
         public override string SolveB()
         {
-            var dict = new Dictionary<(int x, int y, int z, int w), bool>();
+            var activeCubes = new HashSet<(int x, int y, int z, int w)>();
             for (var y = 0; y < lines.Length; y++)
             {
                 for (var x = 0; x < lines[0].Length; x++)
                 {
-                    dict[(x, y, 0, 0)] = lines[y][x] == '#';
+                    if (lines[y][x] == '#')
+                        activeCubes.Add((x, y, 0, 0));
                 }
             }
 
@@ -63,34 +66,34 @@ namespace AoC2020.Solutions
 
             for (var i = 0; i < 6; i++)
             {
-                var newDict = new Dictionary<(int, int, int, int), bool>();
-                for (var w = dict.Keys.Min(x => x.w) - 1; w < dict.Keys.Max(x => x.w) + 2; w++)
+                var newActiveCubes = new HashSet<(int, int, int, int)>();
+                for (var w = activeCubes.Min(x => x.w) - 1; w < activeCubes.Max(x => x.w) + 2; w++)
                 {
-                    for (var z = dict.Keys.Min(x => x.z) - 1; z < dict.Keys.Max(x => x.z) + 2; z++)
+                    for (var z = activeCubes.Min(x => x.z) - 1; z < activeCubes.Max(x => x.z) + 2; z++)
                     {
-                        for (var y = dict.Keys.Min(x => x.y) - 1; y < dict.Keys.Max(x => x.y) + 2; y++)
+                        for (var y = activeCubes.Min(x => x.y) - 1; y < activeCubes.Max(x => x.y) + 2; y++)
                         {
-                            for (var x = dict.Keys.Min(a => a.x) - 1; x < dict.Keys.Max(a => a.x) + 2; x++)
+                            for (var x = activeCubes.Min(a => a.x) - 1; x < activeCubes.Max(a => a.x) + 2; x++)
                             {
-                                var count = 0;
-                                foreach (var move in moves)
-                                {
-                                    dict.TryGetValue((x + move.x, y + move.y, z + move.z, w + move.w), out var active);
-                                    count += active ? 1 : 0;
-                                }
+                                var count = moves.Count(move => activeCubes.Contains((x + move.x, y + move.y, z + move.z, w + move.w)));
 
-                                dict.TryGetValue((x, y, z, w), out var isActive);
-                                newDict[(x, y, z, w)] = isActive ? count == 2 || count == 3 : count == 3;
+                                if (activeCubes.Contains((x, y, z, w)) && (count == 2 || count == 3))
+                                {
+                                    newActiveCubes.Add((x, y, z, w));
+                                }
+                                else if (count == 3)
+                                {
+                                    newActiveCubes.Add((x, y, z, w));
+                                }
                             }
                         }
                     }
                 }
 
-                dict = newDict;
+                activeCubes = newActiveCubes;
             }
-        
 
-            return dict.Count(x => x.Value).ToString();
+            return activeCubes.Count.ToString();
         }
     }
 }
