@@ -31,35 +31,12 @@ namespace AoC2020.Solutions
                             var count = 0;
                             foreach (var move in moves)
                             {
-                                if (dict.TryGetValue((x + move.x, y + move.y, z + move.z), out var active))
-                                {
-                                    count += active ? 1 : 0;
-                                }
+                                dict.TryGetValue((x + move.x, y + move.y, z + move.z), out var active);
+                                count += active ? 1 : 0;
                             }
 
                             dict.TryGetValue((x, y, z), out var isActive);
-                            if (isActive)
-                            {
-                                if (count == 2 || count == 3)
-                                {
-                                    newDict[(x, y, z)] = true;
-                                }
-                                else
-                                {
-                                    newDict[(x, y, z)] = false;
-                                }
-                            }
-                            else
-                            {
-                                if (count == 3)
-                                {
-                                    newDict[(x, y, z)] = true;
-                                }
-                                else
-                                {
-                                    newDict[(x, y, z)] = false;
-                                }
-                            }
+                            newDict[(x, y, z)] = isActive ? count == 2 || count == 3 : count == 3;
                         }
                     }
                 }
@@ -98,36 +75,12 @@ namespace AoC2020.Solutions
                                 var count = 0;
                                 foreach (var move in moves)
                                 {
-                                    if (dict.TryGetValue((x + move.x, y + move.y, z + move.z, w + move.w),
-                                        out var active))
-                                    {
-                                        count += active ? 1 : 0;
-                                    }
+                                    dict.TryGetValue((x + move.x, y + move.y, z + move.z, w + move.w), out var active);
+                                    count += active ? 1 : 0;
                                 }
 
                                 dict.TryGetValue((x, y, z, w), out var isActive);
-                                if (isActive)
-                                {
-                                    if (count == 2 || count == 3)
-                                    {
-                                        newDict[(x, y, z, w)] = true;
-                                    }
-                                    else
-                                    {
-                                        newDict[(x, y, z, w)] = false;
-                                    }
-                                }
-                                else
-                                {
-                                    if (count == 3)
-                                    {
-                                        newDict[(x, y, z, w)] = true;
-                                    }
-                                    else
-                                    {
-                                        newDict[(x, y, z, w)] = false;
-                                    }
-                                }
+                                newDict[(x, y, z, w)] = isActive ? count == 2 || count == 3 : count == 3;
                             }
                         }
                     }
