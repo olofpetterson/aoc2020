@@ -8,21 +8,9 @@ namespace AoC2020.Solutions
     {
         public override string SolveA()
         {
-            var tiles = new List<Tile>();
-
-            for(var i = 0; i < lines.Length; i++)
-            {
-                var tile = new Tile { Id = int.Parse(lines[i].Split(' ', ':')[1])};
-                for(i++; i < lines.Length; i++)
-                {
-                    if (lines[i] == "") break;
-                    tile.Grid.Add(lines[i].ToArray());
-                } 
-                
-                tiles.Add(tile);
-            }
-
+            var tiles = GetTiles();
             var product = 1L;
+            
             foreach (var tile in tiles)
             {
                 var count = tile.Borders.Count(x => tiles.SelectMany(y => y.Borders).Count(z => z == x) == 2);
@@ -37,19 +25,7 @@ namespace AoC2020.Solutions
 
         public override string SolveB()
         {
-            var tiles = new List<Tile>();
-
-            for(var i = 0; i < lines.Length; i++)
-            { 
-                var tile = new Tile();
-                for(i++; i < lines.Length; i++)
-                {
-                    if (lines[i] == "") break;
-                    tile.Grid.Add(lines[i].ToArray());
-                } 
-                
-                tiles.Add(tile);
-            }
+            var tiles = GetTiles();
             var pictureDimension = (int)Math.Sqrt(tiles.Count);
             var corners = new List<Tile>();
 
@@ -93,7 +69,7 @@ namespace AoC2020.Solutions
             {
                 for (var i = 1; i < row[0].Grid.Count - 1; i++)
                 {
-                    grid.Grid.Add(row.SelectMany(x => x.Grid[i].Skip(1).Take(x.Grid[i].Length - 2)).ToArray());
+                    grid.Grid.Add(row.SelectMany(x => x.Grid[i][1..^1]).ToArray());
                 }
             }
 
@@ -101,6 +77,24 @@ namespace AoC2020.Solutions
             grid.RotateAndFlip(tile => (cc = tile.CountMonster()) == 0);
             
             return (grid.Grid.Sum(x => x.Sum(y => y == '#' ? 1 : 0)) - cc * 15).ToString();
+        }
+
+        private List<Tile> GetTiles()
+        {
+            var tiles = new List<Tile>();
+            for(var i = 0; i < lines.Length; i++)
+            {
+                var tile = new Tile { Id = int.Parse(lines[i].Split(' ', ':')[1])};
+                for(i++; i < lines.Length; i++)
+                {
+                    if (lines[i] == "") break;
+                    tile.Grid.Add(lines[i].ToArray());
+                } 
+                
+                tiles.Add(tile);
+            }
+
+            return tiles;
         }
 
         public class Tile
@@ -124,7 +118,7 @@ namespace AoC2020.Solutions
                 (7,2),
                 (10,2),
                 (13,2),
-                (16,2),
+                (16,2)
             };
 
             public int Id { get; set; }
