@@ -52,7 +52,7 @@ namespace AoC2020.Solutions
             {
                 '"' => token[1..2],
                 '|' => "|",
-                _ => GetRegex(rules, rules[token], recursiveDepth + 1)
+                _ => GetRegex(rules, rules[token], recursiveDepth + 1)                          
             };
         }
 
